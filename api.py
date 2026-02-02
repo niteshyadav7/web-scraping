@@ -9,7 +9,14 @@ import pandas as pd
 import csv
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for React frontend
+# Enable CORS for all origins (production)
+CORS(app, resources={
+    r"/api/*": {
+        "origins": "*",
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"]
+    }
+})
 
 # Global state to track scraping progress
 scraping_state = {

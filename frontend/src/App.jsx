@@ -3,9 +3,8 @@ import ScraperForm from './components/ScraperForm'
 import StatusPanel from './components/StatusPanel'
 import './App.css'
 
-// Update this URL after deploying backend to Render
-// Replace 'your-service-name' with your actual Render service name
-const API_URL = import.meta.env.VITE_API_URL || 'https://flipkart-scraper-api.onrender.com/api'
+// Production API URL - Hardcoded
+const API_URL = 'https://web-scraping-4zab.onrender.com/api'
 
 
 function App() {
