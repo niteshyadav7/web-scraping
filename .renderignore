@@ -1,0 +1,17 @@
+# Ignore frontend directory (deployed separately to Hostinger)
+frontend/
+
+# Ignore output files
+output/*.xlsx
+output/*.csv
+debug_last_failed.html
+
+# Ignore documentation
+*.md
+*.txt
+!requirements.txt
+!runtime.txt
+
+# Ignore git
+.git/
+.gitignore
