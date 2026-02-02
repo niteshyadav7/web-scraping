@@ -1,5 +1,6 @@
 import time
 import random
+import os
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -7,22 +8,31 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 def get_driver():
     """
-    Initializes and returns a Selenium Chrome driver with anti-detection options.
-    We do NOT use headless mode to mimic a real user.
+    Initializes and returns a Selenium Chrome driver.
+    Detects if running on Render and configures headless mode accordingly.
     """
     options = Options()
     
-    # 1. Disable the "AutomationControlled" flag to hide Selenium from basic detection
+    # Anti-detection
     options.add_argument("--disable-blink-features=AutomationControlled")
-    
-    # 2. Maximize window to ensure all elements are visible
     options.add_argument("--start-maximized")
+    options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
     
-    # 3. Standard 'user-agent' just in case (optional but good practice)
-    # options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+    # Check if running on Render
+    is_render = os.environ.get('RENDER', False)
+    
+    if is_render:
+        print("🌍 Running on Render - Configuring Headless Chrome")
+        options.add_argument("--headless=new")  # New headless mode
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--window-size=1920,1080")
+        options.binary_location = "/usr/bin/google-chrome"
+    else:
+        print("💻 Running Locally - Chrome UI Visible")
 
-    # Initialize the driver using WebDriverManager
-    # This automatically downloads the correct driver for your Chrome version
+    # Initialize the driver
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=options)
     
